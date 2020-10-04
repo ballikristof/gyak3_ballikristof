@@ -25,6 +25,7 @@ namespace gyak4
             InitializeComponent();
             LoadData();
             CreateExcel();
+            CreateTable();
         }
 
         private void LoadData()
@@ -54,9 +55,81 @@ namespace gyak4
             }
         }
 
-        private void CreateTable()
+        public void CreateTable()
         {
+            string[] headers = new string[]{
+            "Kód",
+            "Eladó",
+            "Oldal",
+            "Kerület",
+            "Lift",
+            "Szobák száma",
+            "Alapterület (m2)",
+            "Ár (mFt)",
+            "Négyzetméter ár (Ft/m2)"};
+
+            
+            for (int i = 0; i < headers.Length; i++)
+            {
+                xlSheet.Cells[1, i + 1] = headers[i];
+            }
+
+            object[,] values = new object[Flats.Count, headers.Length];
+
+            int cntr = 0;
+            foreach (Flat f in Flats)
+            {
+                values[cntr, 0] = f.Code;
+                values[cntr, 1] = f.Vendor;
+                values[cntr, 2] = f.Side;
+                values[cntr, 3] = f.District;
+                values[cntr, 4] = f.Elevator;
+                values[cntr, 5] = f.NumberOfRooms;
+                values[cntr, 6] = f.FloorArea;
+                values[cntr, 7] = f.Price;
+                values[cntr, 8] = "";
+                cntr++;
+
+                
+            }
+
+            xlSheet.get_Range(
+                GetCell(2, 1),
+                GetCell(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
+
+            Excel.Range headerrange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headers.Length));
+            headerrange.Font.Bold = true;
+            headerrange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            headerrange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            headerrange.EntireColumn.AutoFit();
+            headerrange.RowHeight = 40;
+            headerrange.Interior.Color = Color.LightBlue;
+            headerrange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+
+            int lastrowID = xlSheet.UsedRange.Rows.Count;
+
+            Excel.Range sheetrange = xlSheet.get_Range(GetCell(2,1), GetCell(2, lastrowID));
+            sheetrange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
 
         }
+
+        private string GetCell(int x, int y)
+        {
+            string ExcelCoordinate = "";
+            int dividend = y;
+            int modulo;
+
+            while (dividend > 0)
+            {
+                modulo = (dividend - 1) % 26;
+                ExcelCoordinate = Convert.ToChar(65 + modulo).ToString() + ExcelCoordinate;
+                dividend = (int)((dividend - modulo) / 26);
+            }
+            ExcelCoordinate += x.ToString();
+
+            return ExcelCoordinate;
+        }
+
+        
     }
 }
