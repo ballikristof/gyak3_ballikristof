@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using gyak6.Entities;
 using System.Xml;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace gyak6
 {
@@ -21,6 +22,7 @@ namespace gyak6
             InitializeComponent();
             ServiceHivas();
             dataGridView1.DataSource = Rates;
+            Diagram();
             
         }
 
@@ -59,6 +61,23 @@ namespace gyak6
             }
         }
 
-        
+        public void Diagram()
+        {
+            chartRateData.DataSource = Rates;
+
+            var series = chartRateData.Series[0];
+            series.ChartType = SeriesChartType.Line;
+            series.XValueMember = "Date";
+            series.YValueMembers = "Value";
+            series.BorderWidth = 2;
+
+            var legend = chartRateData.Legends[0];
+            legend.Enabled = false;
+
+            var chartarea = chartRateData.ChartAreas[0];
+            chartarea.AxisX.MajorGrid.Enabled = false;
+            chartarea.AxisY.MajorGrid.Enabled = false;
+            chartarea.AxisY.IsStartedFromZero = false;
+        }
     }
 }
