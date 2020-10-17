@@ -8,16 +8,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using gyak6.Entities;
 
 namespace gyak6
 {
     public partial class Form1 : Form
     {
+        BindingList<RateData> Rates = new BindingList<RateData>();
         public Form1()
         {
             InitializeComponent();
             ServiceHivas();
-            
+            dataGridView1.DataSource = Rates;
         }
 
         public void ServiceHivas()
