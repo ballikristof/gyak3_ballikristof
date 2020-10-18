@@ -17,12 +17,39 @@ namespace gyak6
     public partial class Form1 : Form
     {
         BindingList<RateData> Rates = new BindingList<RateData>();
+        BindingList<string> Currencies = new BindingList<string>();
         public Form1()
         {
             InitializeComponent();
+            var mnbservice = new MNBArfolyamServiceSoapClient();
 
-            RefreshDate();
+            var request = new GetCurrencyUnitsRequestBody()
+            {
+                currencyNames = comboBox1.SelectedItem.ToString()
+            };
+
+            var response = mnbservice.GetCurrencyUnits(request);
+
+            var result = response.GetCurrencyUnitsResult;
+
+            var xmldoc = new XmlDocument();
+            xmldoc.LoadXml(result);
+
             
+
+            foreach (XmlElement element in xmldoc.DocumentElement)
+            {
+                string currency = "";
+                Currencies.Add(currency);
+
+                var childElement = (XmlElement)element.ChildNodes[0];
+                if (childElement == null)
+                    continue;
+                currency = childElement.GetAttribute("curr");
+                
+            }
+            RefreshDate();
+            Console.WriteLine(result);
         }
 
         public void ServiceHivas()
@@ -81,11 +108,11 @@ namespace gyak6
 
         public void RefreshDate()
         {
-            
-            
+            Rates.Clear();
             ServiceHivas();
             dataGridView1.DataSource = Rates;
             Diagram();
+            comboBox1.DataSource = Currencies;
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
