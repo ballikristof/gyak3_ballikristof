@@ -78,5 +78,15 @@ namespace gyak8
             _nextToy.Left = label1.Left;
             Controls.Add(_nextToy);
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+            var colorPick = new ColorDialog();
+            colorPick.Color = button1.BackColor;
+            if (colorPick.ShowDialog() != DialogResult.OK)
+                return;
+            button.BackColor = colorPick.Color;
+        }
     }
 }
