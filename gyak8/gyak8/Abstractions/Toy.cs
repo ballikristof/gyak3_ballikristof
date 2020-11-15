@@ -15,6 +15,7 @@ namespace gyak8.Abstractions
             AutoSize = false;
             Height = 50;
             Width = Height;
+            Top = 170;
             Paint += Toy_Paint;
         }
 
