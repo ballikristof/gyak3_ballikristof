@@ -93,5 +93,14 @@ namespace gyak8
                 return;
             button.BackColor = colorPick.Color;
         }
+
+        private void btn_Present_Click(object sender, EventArgs e)
+        {
+            Factory = new PresentFactory
+            {
+                RibbonColor = btn_Ribbonclr.BackColor,
+                BoxColor = btn_Boxclr.BackColor
+            };
+        }
     }
 }
