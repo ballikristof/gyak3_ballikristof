@@ -58,9 +58,6 @@ namespace UnitTestExample.Controllers
             {
                 return false;
             }
-
-            
-            
         }
     }
 }
