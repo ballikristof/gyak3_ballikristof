@@ -39,6 +39,7 @@ namespace gyak10
 
         private void Gc_GameOver(object sender)
         {
+            button1.Hide();
             generation++;
             label1.Text = string.Format(
                 "{0}. generáció", generation);
@@ -69,10 +70,23 @@ namespace gyak10
                          select p;
             if (winner.Count() > 0)
             {
+                button1.Show();
                 winnerBrain = winner.FirstOrDefault().Brain.Clone();
                 gc.GameOver -= Gc_GameOver;
                 return;
             }
+
+            
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            gc.ResetCurrentLevel();
+            gc.AddPlayer(winnerBrain.Clone());
+            gc.AddPlayer();
+            ga.Focus();
+            gc.Start(true);
         }
     }
 }
