@@ -20,6 +20,7 @@ namespace gyak10
         int nbrofSteps = 10;
         int nbrofStepsIncrement = 10;
         int generation = 1;
+        Brain winnerBrain = null;
         public Form1()
         {
             InitializeComponent();
@@ -62,6 +63,16 @@ namespace gyak10
                     gc.AddPlayer(b.Mutate());
             }
             gc.Start();
+
+            var winner = from p in topPerformers
+                         where p.IsWinner
+                         select p;
+            if (winner.Count() > 0)
+            {
+                winnerBrain = winner.FirstOrDefault().Brain.Clone();
+                gc.GameOver -= Gc_GameOver;
+                return;
+            }
         }
     }
 }
